@@ -82,3 +82,15 @@ document.addEventListener("keyup", function (e) {
   }
 }
 );
+
+//PsuedoCode
+//When started, game should have random word selected, and letters become underscored
+//Guess = 10, Win = 0, Loss = 0 (until it increments)
+//Key presses should be lowercase and it should not take non-letter inputs or repeat
+//If it matches a letter in the word, the underscore should be replaced
+//If it does not match, guess should decrement by 1
+//If you guess the word AND guesses are greater than 0, win + 1
+//If you do not guess the word, and guesses are less than 0, loss + 1
+//Random word gets chosen again, game repeats with guesses set to 10
+
+//May need to random word generated and game function be a separate function? and call when needed (at the start of the game, or win or loss)
