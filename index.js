@@ -23,30 +23,32 @@ guesses.textContent = guessCounter;
 //Underscore word
 var wordToGuess = document.querySelector("#word-to-guess");
 var unguessedWord = "";
-for(let i =0; i<randomWord.length; i++){
- unguessedWord += "_"; //adds _ to the end of the string for the length of the word
+for (let i = 0; i < randomWord.length; i++) {
+  unguessedWord += "_"; //adds _ to the end of the string for the length of the word
 }
 wordToGuess.textContent = unguessedWord;
 
 //Keyboard Input
+var incorrectGuesses = document.querySelector("#incorrect-letters");
+var incorrect = [];
 var arrayUnguessed = unguessedWord.split("");
-document.addEventListener('keyup', function(e){
-//Guess counter
-var updatedWord = "";
-guesses.textContent = guessCounter;
-var guess = e.key.toLowerCase();
-for (let i = 0; i<randomWord.length; i++){
-  if(guess === randomWord[i]){
-    arrayUnguessed[i] = randomWord[i];
-    unguessedWord = arrayUnguessed.join("");//No commas
+document.addEventListener("keyup", function (e) {
+  var updatedWord = "";
+  var guess = e.key.toLowerCase();
+  if (randomWord.includes(guess)) {
+    for (let i = 0; i < randomWord.length; i++) {
+    if (guess === randomWord[i]) {
+      arrayUnguessed[i] = randomWord[i];
+      unguessedWord = arrayUnguessed.join(""); //No commas
+    }
   }
-  else{
-guessCounter = guessCounter -1;
+  } else {
+    incorrect.push(guess);
+    incorrectGuesses.textContent = incorrect;
+    guessCounter = guessCounter - 1;
+    guesses.textContent = guessCounter;
   }
-}
-wordToGuess.textContent = unguessedWord;
-}
-)
+  
 
-
-
+  wordToGuess.textContent = unguessedWord;
+});
