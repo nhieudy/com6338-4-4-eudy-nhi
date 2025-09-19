@@ -70,12 +70,12 @@ document.addEventListener("keyup", function (e) {
   previousGuess = guess;
   wordToGuess.textContent = unguessedWord;
   //Check if win or loss
-  if (unguessedWord === randomWord && guessCounter >= 10){
+  if (unguessedWord === randomWord && guessCounter >= 0){
     winCounter = winCounter + 1;
     wins.textContent = winCounter;
     console.log("You win!");
   }
-  else if (unguessedWord !== randomWord && guessCounter == 0){
+  else if (unguessedWord !== randomWord && guessCounter <= 0){
     lossCounter = lossCounter + 1;
     losses.textContent = lossCounter;
     console.log("You lose!");
@@ -92,5 +92,3 @@ document.addEventListener("keyup", function (e) {
 //If you guess the word AND guesses are greater than 0, win + 1
 //If you do not guess the word, and guesses are less than 0, loss + 1
 //Random word gets chosen again, game repeats with guesses set to 10
-
-//May need to random word generated and game function be a separate function? and call when needed (at the start of the game, or win or loss)
