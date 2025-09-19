@@ -29,12 +29,17 @@ for (let i = 0; i < randomWord.length; i++) {
 wordToGuess.textContent = unguessedWord;
 
 //Keyboard Input
+var previousGuess = "";
 var incorrectGuesses = document.querySelector("#incorrect-letters");
-var incorrect = [];
+var incorrectList = [];
 var arrayUnguessed = unguessedWord.split("");
 document.addEventListener("keyup", function (e) {
-  var updatedWord = "";
-  var guess = e.key.toLowerCase();
+  if(e.key.match(/^[a-zA-Z]$/)){
+    var guess = e.key.toLowerCase();
+  }
+  else{
+    return;
+  }
   if (randomWord.includes(guess)) {
     for (let i = 0; i < randomWord.length; i++) {
     if (guess === randomWord[i]) {
@@ -42,13 +47,21 @@ document.addEventListener("keyup", function (e) {
       unguessedWord = arrayUnguessed.join(""); //No commas
     }
   }
-  } else {
-    incorrect.push(guess);
-    incorrectGuesses.textContent = incorrect;
-    guessCounter = guessCounter - 1;
-    guesses.textContent = guessCounter;
+ } 
+  else if (guess === previousGuess){
+    return;
   }
-  
-
+ else {
+    //Check if incorrect array includes guess already
+    if (incorrectList.includes(guess)){
+      return;
+    }
+    else{
+    incorrectList.push(guess); //adds letter to incorrect list
+    incorrectGuesses.textContent = incorrectList;
+    guessCounter = guessCounter - 1; //lower guess counter
+    guesses.textContent = guessCounter;
+  }}
+  previousGuess = guess;
   wordToGuess.textContent = unguessedWord;
 });
