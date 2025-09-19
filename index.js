@@ -14,15 +14,21 @@ var words = [
 //Generate a random word, based on the words array
 var randomWord = words[Math.floor(Math.random() * words.length)];
 console.log(randomWord);
+var wins = document.querySelector("#wins");
+var winCounter = 0;
+var losses = document.querySelector("#losses");
+var lossCounter = 0;
+var guesses = document.querySelector("#remaining-guesses");
+var guessCounter = 10;
+var wordToGuess = document.querySelector("#word-to-guess");
+var unguessedWord = "";
+
 //Place the word into the word-to-guess element, with underscores
 //Should also display ten remaining guesses in #remaining-guesses
 //Guesses
-var guessCounter = 10;
-var guesses = document.querySelector("#remaining-guesses");
+
 guesses.textContent = guessCounter;
 //Underscore word
-var wordToGuess = document.querySelector("#word-to-guess");
-var unguessedWord = "";
 for (let i = 0; i < randomWord.length; i++) {
   unguessedWord += "_"; //adds _ to the end of the string for the length of the word
 }
@@ -34,34 +40,45 @@ var incorrectGuesses = document.querySelector("#incorrect-letters");
 var incorrectList = [];
 var arrayUnguessed = unguessedWord.split("");
 document.addEventListener("keyup", function (e) {
-  if(e.key.match(/^[a-zA-Z]$/)){
+  //Make sure it's in a letter, and not the other keyboard inputs
+  if (e.key.match(/^[a-zA-Z]$/)) {
     var guess = e.key.toLowerCase();
-  }
-  else{
+  } else {
     return;
   }
+  //Check if random word has guess in it
   if (randomWord.includes(guess)) {
     for (let i = 0; i < randomWord.length; i++) {
-    if (guess === randomWord[i]) {
-      arrayUnguessed[i] = randomWord[i];
-      unguessedWord = arrayUnguessed.join(""); //No commas
+      if (guess === randomWord[i]) {
+        arrayUnguessed[i] = randomWord[i];
+        unguessedWord = arrayUnguessed.join(""); //No commas
+      }
     }
-  }
- } 
-  else if (guess === previousGuess){
+  } else if (guess === previousGuess) {
     return;
-  }
- else {
-    //Check if incorrect array includes guess already
-    if (incorrectList.includes(guess)){
+  } else {
+    //Check if incorrectList array includes guess already
+    if (incorrectList.includes(guess)) {
       return;
+    } else {
+      incorrectList.push(guess); //adds letter to incorrect list
+      incorrectGuesses.textContent = incorrectList;
+      guessCounter = guessCounter - 1; //lower guess counter
+      guesses.textContent = guessCounter;
     }
-    else{
-    incorrectList.push(guess); //adds letter to incorrect list
-    incorrectGuesses.textContent = incorrectList;
-    guessCounter = guessCounter - 1; //lower guess counter
-    guesses.textContent = guessCounter;
-  }}
+  }
   previousGuess = guess;
   wordToGuess.textContent = unguessedWord;
-});
+  //Check if win or loss
+  if (unguessedWord === randomWord && guessCounter >= 10){
+    winCounter = winCounter + 1;
+    wins.textContent = winCounter;
+    console.log("You win!");
+  }
+  else if (unguessedWord !== randomWord && guessCounter == 0){
+    lossCounter = lossCounter + 1;
+    losses.textContent = lossCounter;
+    console.log("You lose!");
+  }
+}
+);
