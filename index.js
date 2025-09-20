@@ -11,7 +11,7 @@ var words = [
   "ukulele",
   "mango",
 ];
-//Generate a random word, based on the words array
+//Initial state, when game is first loaded in:
 var randomWord = words[Math.floor(Math.random() * words.length)];
 console.log(randomWord);
 var wins = document.querySelector("#wins");
@@ -20,25 +20,21 @@ var losses = document.querySelector("#losses");
 var lossCounter = 0;
 var guesses = document.querySelector("#remaining-guesses");
 var guessCounter = 10;
+guesses.textContent = guessCounter;
 var wordToGuess = document.querySelector("#word-to-guess");
 var unguessedWord = "";
-
-//Place the word into the word-to-guess element, with underscores
-//Should also display ten remaining guesses in #remaining-guesses
-//Guesses
-
-guesses.textContent = guessCounter;
+var previousGuess = "";
+var previousWord = document.querySelector("#previous-word");
+var preWord = "";
+var incorrectGuesses = document.querySelector("#incorrect-letters");
+var incorrectList = [];
 //Underscore word
 for (let i = 0; i < randomWord.length; i++) {
   unguessedWord += "_"; //adds _ to the end of the string for the length of the word
 }
 wordToGuess.textContent = unguessedWord;
-
-//Keyboard Input
-var previousGuess = "";
-var incorrectGuesses = document.querySelector("#incorrect-letters");
-var incorrectList = [];
 var arrayUnguessed = unguessedWord.split("");
+//Keyboard Input
 document.addEventListener("keyup", function (e) {
   //Make sure it's in a letter, and not the other keyboard inputs
   if (e.key.match(/^[a-zA-Z]$/)) {
@@ -67,22 +63,65 @@ document.addEventListener("keyup", function (e) {
       guesses.textContent = guessCounter;
     }
   }
+  //this is my issue probably
   previousGuess = guess;
   wordToGuess.textContent = unguessedWord;
+
   //Check if win or loss
   if (unguessedWord === randomWord && guessCounter >= 0){
     winCounter = winCounter + 1;
     wins.textContent = winCounter;
+    preWord = randomWord;
+    previousWord.textContent = preWord;
     console.log("You win!");
+    //object gets passed here
+    var restartGameValues = restartGame();
+    //reset guesses
+    guessCounter = restartGameValues.guessC;
+    guesses.textContent = guessCounter;
+    //reset incorrect list
+    incorrectList = restartGameValues.incorrectL;
+    incorrectGuesses.textContent = incorrectList;
+    //reset randomword
+    randomWord = restartGameValues.randomW;
+    //reset unguessWord
+    unguessedWord = restartGameValues.unguessedW;
+    wordToGuess.textContent = unguessedWord;
   }
   else if (unguessedWord !== randomWord && guessCounter <= 0){
     lossCounter = lossCounter + 1;
     losses.textContent = lossCounter;
     console.log("You lose!");
+    preWord = randomWord;
+    previousWord.textContent = preWord;
+    var restartGameValues = restartGame();
   }
 }
 );
 
+function restartGame(){
+console.log("restart");
+incorrectList = [];
+unguessedWord = "";
+randomWord = "";
+guessCounter = 10;
+randomWord = words[Math.floor(Math.random() * words.length)];
+console.log("Restart random word: " + randomWord);
+for (let i = 0; i < randomWord.length; i++) {
+  unguessedWord += "_"; //adds _ to the end of the string for the length of the word
+}
+arrayUnguessed = unguessedWord.split("");
+console.log("Restart unguessed word: " + unguessedWord)
+//need to return guess counter, incorrect array, randomWord, and unguessWord
+var restartGameValues = {
+  guessC: guessCounter,
+  randomW: randomWord,
+  unguessedW: unguessedWord,
+  incorrectL: incorrectList
+}
+console.log(restartGameValues);
+return(restartGameValues);
+}
 //PsuedoCode
 //When started, game should have random word selected, and letters become underscored
 //Guess = 10, Win = 0, Loss = 0 (until it increments)
