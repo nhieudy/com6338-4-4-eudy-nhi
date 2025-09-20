@@ -35,6 +35,7 @@ for (let i = 0; i < randomWord.length; i++) {
 wordToGuess.textContent = unguessedWord;
 var arrayUnguessed = unguessedWord.split("");
 //Keyboard Input
+
 document.addEventListener("keyup", function (e) {
   //Make sure it's in a letter, and not the other keyboard inputs
   if (e.key.match(/^[a-zA-Z]$/)) {
@@ -68,7 +69,7 @@ document.addEventListener("keyup", function (e) {
   wordToGuess.textContent = unguessedWord;
 
   //Check if win or loss
-  if (unguessedWord === randomWord && guessCounter >= 0){
+  if (unguessedWord === randomWord && guessCounter > 0){
     winCounter = winCounter + 1;
     wins.textContent = winCounter;
     preWord = randomWord;
@@ -88,13 +89,24 @@ document.addEventListener("keyup", function (e) {
     unguessedWord = restartGameValues.unguessedW;
     wordToGuess.textContent = unguessedWord;
   }
-  else if (unguessedWord !== randomWord && guessCounter <= 0){
+  else if (unguessedWord !== randomWord && (guessCounter <= 0)){
     lossCounter = lossCounter + 1;
     losses.textContent = lossCounter;
     console.log("You lose!");
     preWord = randomWord;
     previousWord.textContent = preWord;
     var restartGameValues = restartGame();
+    //reset guesses
+    guessCounter = restartGameValues.guessC;
+    guesses.textContent = guessCounter;
+    //reset incorrect list
+    incorrectList = restartGameValues.incorrectL;
+    incorrectGuesses.textContent = incorrectList;
+    //reset randomword
+    randomWord = restartGameValues.randomW;
+    //reset unguessWord
+    unguessedWord = restartGameValues.unguessedW;
+    wordToGuess.textContent = unguessedWord;
   }
 }
 );
